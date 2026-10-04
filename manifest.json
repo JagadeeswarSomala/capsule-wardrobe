@@ -11,34 +11,34 @@
   "categories": ["lifestyle", "productivity"],
   "screenshots": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%230f172a' width='192' height='192'/><text x='96' y='96' font-size='32' fill='%2360a5fa' text-anchor='middle' dy='.3em' font-family='sans-serif' font-weight='bold'>Wardrobe</text></svg>",
-      "sizes": "192x192",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 540 720'><defs><linearGradient id='grad' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%233b82f6;stop-opacity:1' /><stop offset='100%' style='stop-color:%231e40af;stop-opacity:1' /></linearGradient></defs><rect fill='%230f172a' width='540' height='720'/><rect fill='url(%23grad)' width='540' height='140'/><text x='270' y='80' font-size='48' fill='white' text-anchor='middle' font-family='sans-serif' font-weight='bold'>Capsule Studio</text><rect fill='%231e293b' x='20' y='160' width='500' height='500' rx='12'/><text x='270' y='200' font-size='20' fill='%2394a3b8' text-anchor='middle' font-family='sans-serif'>CURRENT EQUIPPED LOOK</text><text x='50' y='260' font-size='16' fill='%2394a3b8' font-family='sans-serif'>Outerwear</text><text x='480' y='260' font-size='16' fill='%23f8fafc' text-anchor='end' font-family='sans-serif' font-weight='600'>None</text><text x='50' y='310' font-size='16' fill='%2394a3b8' font-family='sans-serif'>Top</text><text x='480' y='310' font-size='16' fill='%23f8fafc' text-anchor='end' font-family='sans-serif' font-weight='600'>Sky Blue OCBD</text><text x='50' y='360' font-size='16' fill='%2394a3b8' font-family='sans-serif'>Bottoms</text><text x='480' y='360' font-size='16' fill='%23f8fafc' text-anchor='end' font-family='sans-serif' font-weight='600'>Beige Chinos</text><rect fill='%233b82f6' x='20' y='600' width='240' height='40' rx='6'/><text x='140' y='625' font-size='14' fill='white' text-anchor='middle' font-family='sans-serif' font-weight='bold'>Shuffle Look</text><rect fill='%231e293b' x='280' y='600' width='240' height='40' rx='6' stroke='%23334155' stroke-width='1'/><text x='400' y='625' font-size='14' fill='%23f8fafc' text-anchor='middle' font-family='sans-serif' font-weight='bold'>Clear Stage</text></svg>",
+      "sizes": "540x720",
       "type": "image/svg+xml",
       "form_factor": "narrow"
-    },
-    {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%230f172a' width='512' height='512'/><text x='256' y='256' font-size='80' fill='%2360a5fa' text-anchor='middle' dy='.3em' font-family='sans-serif' font-weight='bold'>Wardrobe</text></svg>",
-      "sizes": "512x512",
-      "type": "image/svg+xml",
-      "form_factor": "wide"
     }
   ],
   "icons": [
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%233b82f6' width='192' height='192' rx='45'/><text x='96' y='96' font-size='100' fill='white' text-anchor='middle' dy='.35em' font-family='sans-serif' font-weight='bold'>W</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><defs><linearGradient id='grad1' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%233b82f6;stop-opacity:1' /><stop offset='100%' style='stop-color:%231e40af;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad1)' width='192' height='192' rx='45'/><text x='96' y='100' font-size='110' fill='white' text-anchor='middle' font-family='sans-serif' font-weight='bold'>W</text></svg>",
       "sizes": "192x192",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><rect fill='%233b82f6' width='512' height='512' rx='120'/><text x='256' y='256' font-size='280' fill='white' text-anchor='middle' dy='.33em' font-family='sans-serif' font-weight='bold'>W</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='grad2' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%233b82f6;stop-opacity:1' /><stop offset='100%' style='stop-color:%231e40af;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad2)' width='512' height='512' rx='120'/><text x='256' y='280' font-size='300' fill='white' text-anchor='middle' font-family='sans-serif' font-weight='bold'>W</text></svg>",
       "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "any"
     },
     {
-      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%233b82f6' width='192' height='192' rx='45'/><text x='96' y='96' font-size='100' fill='white' text-anchor='middle' dy='.35em' font-family='sans-serif' font-weight='bold'>W</text></svg>",
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><defs><linearGradient id='grad3' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%233b82f6;stop-opacity:1' /><stop offset='100%' style='stop-color:%231e40af;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad3)' width='192' height='192' rx='45'/><text x='96' y='100' font-size='110' fill='white' text-anchor='middle' font-family='sans-serif' font-weight='bold'>W</text></svg>",
       "sizes": "192x192",
+      "type": "image/svg+xml",
+      "purpose": "maskable"
+    },
+    {
+      "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'><defs><linearGradient id='grad4' x1='0%' y1='0%' x2='100%' y2='100%'><stop offset='0%' style='stop-color:%233b82f6;stop-opacity:1' /><stop offset='100%' style='stop-color:%231e40af;stop-opacity:1' /></linearGradient></defs><rect fill='url(%23grad4)' width='512' height='512' rx='120'/><text x='256' y='280' font-size='300' fill='white' text-anchor='middle' font-family='sans-serif' font-weight='bold'>W</text></svg>",
+      "sizes": "512x512",
       "type": "image/svg+xml",
       "purpose": "maskable"
     }
@@ -51,7 +51,7 @@
       "url": "./index.html?action=shuffle",
       "icons": [
         {
-          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%233b82f6' width='96' height='96' rx='20'/><text x='48' y='48' font-size='48' fill='white' text-anchor='middle' dy='.35em'>⚡</text></svg>",
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%233b82f6' width='96' height='96' rx='20'/><text x='48' y='54' font-size='48' fill='white' text-anchor='middle' font-family='sans-serif'>⚡</text></svg>",
           "sizes": "96x96",
           "type": "image/svg+xml"
         }
@@ -64,7 +64,7 @@
       "url": "./index.html?action=log",
       "icons": [
         {
-          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%2310b981' width='96' height='96' rx='20'/><text x='48' y='48' font-size='48' fill='white' text-anchor='middle' dy='.35em'>✓</text></svg>",
+          "src": "data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 96 96'><rect fill='%2310b981' width='96' height='96' rx='20'/><text x='48' y='54' font-size='48' fill='white' text-anchor='middle' font-family='sans-serif'>✓</text></svg>",
           "sizes": "96x96",
           "type": "image/svg+xml"
         }
