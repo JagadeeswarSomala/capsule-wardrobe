@@ -4,10 +4,14 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
   <meta name="theme-color" content="#0f172a">
-  <title>Wardrobe Studio</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="apple-mobile-web-app-title" content="Wardrobe">
+  <title>Capsule Wardrobe Studio</title>
   
-  <!-- Embedded PWA Manifest -->
-  <link rel="manifest" href="data:application/manifest+json;utf-8,%7B%22name%22%3A%22Wardrobe%20Studio%22%2C%22short_name%22%3A%22Wardrobe%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%230f172a%22%7D">
+  <!-- PWA Manifest -->
+  <link rel="manifest" href="./manifest.json">
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 192 192'><rect fill='%233b82f6' width='192' height='192' rx='45'/><text x='96' y='96' font-size='100' fill='white' text-anchor='middle' dy='.35em' font-family='sans-serif' font-weight='bold'>W</text></svg>">
 
   <style>
     :root {
@@ -27,6 +31,7 @@
     .btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
     .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
     .btn:active { transform: scale(0.97); }
+    .btn-install { background: #10b981; border-color: #10b981; }
 
     .container { padding: 12px; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
 
@@ -48,7 +53,7 @@
     .chip.active { background: #1e3a8a; border-color: #3b82f6; color: #93c5fd; }
 
     /* Inventory Items List */
-    .item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 10px; }
     .item-meta { display: flex; flex-direction: column; gap: 2px; }
     .item-name { font-size: 0.95rem; font-weight: 600; }
     .item-sub { font-size: 0.75rem; color: var(--muted); }
@@ -56,6 +61,12 @@
     /* Backup Actions */
     .backup-panel { display: flex; gap: 8px; margin-top: 10px; }
     .backup-panel .btn { flex: 1; text-align: center; }
+
+    /* Install Banner */
+    #install-banner { background: linear-gradient(135deg, #3b82f6, #1e40af); padding: 12px; border-radius: 8px; margin-bottom: 12px; display: none; }
+    #install-banner.show { display: block; }
+    #install-banner p { font-size: 0.85rem; margin-bottom: 8px; }
+    #install-btn { width: 100%; }
   </style>
 </head>
 <body>
@@ -66,6 +77,12 @@
   </header>
 
   <div class="container">
+    <!-- Install Banner -->
+    <div id="install-banner">
+      <p>📱 Install Capsule Studio for offline access!</p>
+      <button class="btn btn-install" id="install-btn" onclick="installApp()">Install App</button>
+    </div>
+
     <!-- Mannequin / Active Stage -->
     <div class="stage-card">
       <div class="stage-title">CURRENT EQUIPPED LOOK</div>
@@ -104,6 +121,35 @@
   </div>
 
   <script>
+    // --- PWA INSTALL PROMPT ---
+    let deferredPrompt;
+    const installBanner = document.getElementById('install-banner');
+    const installBtn = document.getElementById('install-btn');
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      installBanner.classList.add('show');
+    });
+
+    function installApp() {
+      if (deferredPrompt) {
+        deferredPrompt.prompt();
+        deferredPrompt.userChoice.then((choiceResult) => {
+          if (choiceResult.outcome === 'accepted') {
+            console.log('App installed');
+          }
+          deferredPrompt = null;
+          installBanner.classList.remove('show');
+        });
+      }
+    }
+
+    window.addEventListener('appinstalled', () => {
+      console.log('PWA was installed');
+      installBanner.classList.remove('show');
+    });
+
     // --- 1. DEFAULT DATA ---
     const defaultWardrobe = [
       { id: 1, name: "Sky Blue OCBD", category: "Tops", wears: 4 },
@@ -255,20 +301,11 @@
       reader.readAsText(e.target.files[0]);
     }
 
-    // --- 6. OFFLINE SERVICE WORKER ---
+    // --- 6. SERVICE WORKER REGISTRATION ---
     if ('serviceWorker' in navigator) {
-      const swCode = `
-        const CACHE = 'wardrobe-v1';
-        self.addEventListener('install', e => {
-          e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./'])));
-          self.skipWaiting();
-        });
-        self.addEventListener('fetch', e => {
-          e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
-        });
-      `;
-      const blob = new Blob([swCode], { type: 'application/javascript' });
-      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+      navigator.serviceWorker.register('./sw.js').catch(err => {
+        console.log('Service Worker registration failed:', err);
+      });
     }
 
     // Init on start
