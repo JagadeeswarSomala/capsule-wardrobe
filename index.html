@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+  <meta name="theme-color" content="#0f172a">
+  <title>Wardrobe Studio</title>
+  
+  <!-- Embedded PWA Manifest -->
+  <link rel="manifest" href="data:application/manifest+json;utf-8,%7B%22name%22%3A%22Wardrobe%20Studio%22%2C%22short_name%22%3A%22Wardrobe%22%2C%22start_url%22%3A%22.%22%2C%22display%22%3A%22standalone%22%2C%22background_color%22%3A%22%230f172a%22%2C%22theme_color%22%3A%22%230f172a%22%7D">
+
+  <style>
+    :root {
+      --bg: #0f172a;
+      --card-bg: #1e293b;
+      --accent: #3b82f6;
+      --text: #f8fafc;
+      --muted: #94a3b8;
+      --border: #334155;
+    }
+    * { box-sizing: border-box; margin: 0; padding: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; -webkit-tap-highlight-color: transparent; }
+    body { background-color: var(--bg); color: var(--text); padding-bottom: 30px; }
+    
+    header { padding: 16px; background-color: var(--card-bg); border-bottom: 1px solid var(--border); display: flex; justify-content: space-between; align-items: center; }
+    h1 { font-size: 1.1rem; font-weight: 700; color: #60a5fa; }
+    
+    .btn { background: var(--card-bg); border: 1px solid var(--border); color: var(--text); padding: 8px 12px; border-radius: 8px; font-size: 0.85rem; font-weight: 600; cursor: pointer; }
+    .btn-primary { background: var(--accent); border-color: var(--accent); color: white; }
+    .btn:active { transform: scale(0.97); }
+
+    .container { padding: 12px; max-width: 480px; margin: 0 auto; display: flex; flex-direction: column; gap: 14px; }
+
+    /* Active Outfit Stage */
+    .stage-card { background: var(--card-bg); border-radius: 12px; padding: 14px; border: 1px solid var(--border); }
+    .stage-title { font-size: 0.75rem; font-weight: 700; letter-spacing: 0.05em; color: var(--muted); margin-bottom: 10px; }
+    .slot-row { display: flex; justify-content: space-between; align-items: center; padding: 6px 0; border-bottom: 1px solid #33415555; }
+    .slot-row:last-child { border-bottom: none; }
+    .slot-label { font-size: 0.8rem; color: var(--muted); width: 85px; }
+    .slot-val { font-size: 0.9rem; font-weight: 500; flex: 1; text-align: right; }
+
+    /* Quick Action Buttons */
+    .action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+
+    /* Category Filter Chips */
+    .chips { display: flex; gap: 8px; overflow-x: auto; padding-bottom: 4px; scrollbar-width: none; }
+    .chips::-webkit-scrollbar { display: none; }
+    .chip { padding: 6px 14px; background: var(--card-bg); border: 1px solid var(--border); border-radius: 20px; font-size: 0.8rem; color: var(--muted); white-space: nowrap; cursor: pointer; }
+    .chip.active { background: #1e3a8a; border-color: #3b82f6; color: #93c5fd; }
+
+    /* Inventory Items List */
+    .item-card { background: var(--card-bg); border: 1px solid var(--border); border-radius: 10px; padding: 12px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
+    .item-meta { display: flex; flex-direction: column; gap: 2px; }
+    .item-name { font-size: 0.95rem; font-weight: 600; }
+    .item-sub { font-size: 0.75rem; color: var(--muted); }
+
+    /* Backup Actions */
+    .backup-panel { display: flex; gap: 8px; margin-top: 10px; }
+    .backup-panel .btn { flex: 1; text-align: center; }
+  </style>
+</head>
+<body>
+
+  <header>
+    <h1>Capsule Studio</h1>
+    <button class="btn btn-primary" onclick="shuffleOutfit()">Shuffle Look</button>
+  </header>
+
+  <div class="container">
+    <!-- Mannequin / Active Stage -->
+    <div class="stage-card">
+      <div class="stage-title">CURRENT EQUIPPED LOOK</div>
+      <div class="slot-row"><span class="slot-label">Outerwear</span><span class="slot-val" id="slot-Outerwear">None</span></div>
+      <div class="slot-row"><span class="slot-label">Top</span><span class="slot-val" id="slot-Tops">Sky Blue OCBD</span></div>
+      <div class="slot-row"><span class="slot-label">Bottoms</span><span class="slot-val" id="slot-Bottoms">Beige Chinos</span></div>
+      <div class="slot-row"><span class="slot-label">Footwear</span><span class="slot-val" id="slot-Footwear">White Sneakers</span></div>
+      <div class="slot-row"><span class="slot-label">Accessory</span><span class="slot-val" id="slot-Accessories">Leather Watch</span></div>
+    </div>
+
+    <!-- Quick Actions -->
+    <div class="action-grid">
+      <button class="btn" onclick="logWear()">Log Today's Wear</button>
+      <button class="btn" onclick="resetOutfit()">Clear Stage</button>
+    </div>
+
+    <!-- Category Filter Tabs -->
+    <div class="chips" id="chip-container">
+      <div class="chip active" onclick="setFilter('All', this)">All</div>
+      <div class="chip" onclick="setFilter('Tops', this)">Tops</div>
+      <div class="chip" onclick="setFilter('Bottoms', this)">Bottoms</div>
+      <div class="chip" onclick="setFilter('Outerwear', this)">Outerwear</div>
+      <div class="chip" onclick="setFilter('Footwear', this)">Footwear</div>
+      <div class="chip" onclick="setFilter('Accessories', this)">Accessories</div>
+    </div>
+
+    <!-- Wardrobe Catalog -->
+    <div id="catalog-list"></div>
+
+    <!-- Backup Controls -->
+    <div class="backup-panel">
+      <button class="btn" onclick="exportBackup()">Export JSON</button>
+      <button class="btn" onclick="document.getElementById('import-file').click()">Import JSON</button>
+      <input type="file" id="import-file" style="display:none" onchange="importBackup(event)" accept=".json">
+    </div>
+  </div>
+
+  <script>
+    // --- 1. DEFAULT DATA ---
+    const defaultWardrobe = [
+      { id: 1, name: "Sky Blue OCBD", category: "Tops", wears: 4 },
+      { id: 2, name: "White Heavyweight Tee", category: "Tops", wears: 8 },
+      { id: 3, name: "Navy Pique Polo", category: "Tops", wears: 2 },
+      { id: 4, name: "Beige Chinos", category: "Bottoms", wears: 5 },
+      { id: 5, name: "Dark Indigo Denim", category: "Bottoms", wears: 6 },
+      { id: 6, name: "Charcoal Smart Trousers", category: "Bottoms", wears: 3 },
+      { id: 7, name: "Unstructured Navy Blazer", category: "Outerwear", wears: 1 },
+      { id: 8, name: "Olive Casual Overshirt", category: "Outerwear", wears: 3 },
+      { id: 9, name: "White Leather Sneakers", category: "Footwear", wears: 11 },
+      { id: 10, name: "Dark Brown Loafers", category: "Footwear", wears: 2 },
+      { id: 11, name: "Leather Watch", category: "Accessories", wears: 12 }
+    ];
+
+    let wardrobe = JSON.parse(localStorage.getItem("wardrobe_items")) || defaultWardrobe;
+    let outfit = JSON.parse(localStorage.getItem("wardrobe_outfit")) || {
+      Outerwear: "None",
+      Tops: "Sky Blue OCBD",
+      Bottoms: "Beige Chinos",
+      Footwear: "White Leather Sneakers",
+      Accessories: "Leather Watch"
+    };
+
+    let activeFilter = "All";
+
+    // --- 2. PERSISTENCE HELPERS ---
+    function saveData() {
+      localStorage.setItem("wardrobe_items", JSON.stringify(wardrobe));
+      localStorage.setItem("wardrobe_outfit", JSON.stringify(outfit));
+    }
+
+    // --- 3. UI RENDERING ---
+    function renderStage() {
+      for (const [category, name] of Object.entries(outfit)) {
+        const el = document.getElementById(`slot-${category}`);
+        if (el) el.textContent = name;
+      }
+    }
+
+    function renderCatalog() {
+      const container = document.getElementById("catalog-list");
+      container.innerHTML = "";
+
+      const filtered = activeFilter === "All" 
+        ? wardrobe 
+        : wardrobe.filter(i => i.category === activeFilter);
+
+      filtered.forEach(item => {
+        const isEquipped = outfit[item.category] === item.name;
+        const div = document.createElement("div");
+        div.className = "item-card";
+        div.innerHTML = `
+          <div class="item-meta">
+            <span class="item-name">${item.name}</span>
+            <span class="item-sub">${item.category} • Worn ${item.wears}x</span>
+          </div>
+          <button class="btn ${isEquipped ? 'btn-primary' : ''}" onclick="toggleEquip(${item.id})">
+            ${isEquipped ? 'Equipped' : 'Equip'}
+          </button>
+        `;
+        container.appendChild(div);
+      });
+    }
+
+    // --- 4. ACTIONS ---
+    function toggleEquip(id) {
+      const item = wardrobe.find(i => i.id === id);
+      if (!item) return;
+
+      outfit[item.category] = (outfit[item.category] === item.name) ? "None" : item.name;
+      saveData();
+      renderStage();
+      renderCatalog();
+    }
+
+    function setFilter(cat, chipEl) {
+      activeFilter = cat;
+      document.querySelectorAll(".chip").forEach(c => c.classList.remove("active"));
+      chipEl.classList.add("active");
+      renderCatalog();
+    }
+
+    function shuffleOutfit() {
+      const cats = ["Outerwear", "Tops", "Bottoms", "Footwear", "Accessories"];
+      cats.forEach(c => {
+        const matching = wardrobe.filter(i => i.category === c);
+        if (c === "Outerwear" && Math.random() < 0.45) {
+          outfit[c] = "None";
+        } else if (matching.length) {
+          outfit[c] = matching[Math.floor(Math.random() * matching.length)].name;
+        }
+      });
+      saveData();
+      renderStage();
+      renderCatalog();
+    }
+
+    function resetOutfit() {
+      outfit = { Outerwear: "None", Tops: "None", Bottoms: "None", Footwear: "None", Accessories: "None" };
+      saveData();
+      renderStage();
+      renderCatalog();
+    }
+
+    function logWear() {
+      let count = 0;
+      for (const name of Object.values(outfit)) {
+        if (name !== "None") {
+          const item = wardrobe.find(i => i.name === name);
+          if (item) { item.wears++; count++; }
+        }
+      }
+      if (count > 0) {
+        saveData();
+        renderCatalog();
+        alert(`Logged today's outfit across ${count} items!`);
+      } else {
+        alert("Equip some items first!");
+      }
+    }
+
+    // --- 5. BACKUP & RESTORE ---
+    function exportBackup() {
+      const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify({ wardrobe, outfit }));
+      const dlAnchor = document.createElement('a');
+      dlAnchor.setAttribute("href", dataStr);
+      dlAnchor.setAttribute("download", `wardrobe_backup_${new Date().toISOString().slice(0,10)}.json`);
+      dlAnchor.click();
+    }
+
+    function importBackup(e) {
+      const reader = new FileReader();
+      reader.onload = (event) => {
+        try {
+          const parsed = JSON.parse(event.target.result);
+          if (parsed.wardrobe && parsed.outfit) {
+            wardrobe = parsed.wardrobe;
+            outfit = parsed.outfit;
+            saveData();
+            renderStage();
+            renderCatalog();
+            alert("Backup restored successfully!");
+          }
+        } catch (err) {
+          alert("Invalid backup file.");
+        }
+      };
+      reader.readAsText(e.target.files[0]);
+    }
+
+    // --- 6. OFFLINE SERVICE WORKER ---
+    if ('serviceWorker' in navigator) {
+      const swCode = `
+        const CACHE = 'wardrobe-v1';
+        self.addEventListener('install', e => {
+          e.waitUntil(caches.open(CACHE).then(c => c.addAll(['./'])));
+          self.skipWaiting();
+        });
+        self.addEventListener('fetch', e => {
+          e.respondWith(caches.match(e.request).then(r => r || fetch(e.request)));
+        });
+      `;
+      const blob = new Blob([swCode], { type: 'application/javascript' });
+      navigator.serviceWorker.register(URL.createObjectURL(blob)).catch(() => {});
+    }
+
+    // Init on start
+    renderStage();
+    renderCatalog();
+  </script>
+</body>
+</html>
